@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact & Quotes | Retro-ER Electronics Repair</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="Icon.png" alt="Retro-ER Logo">
+      <div class="logo-text">
+        <div>RETRO<span>-ER</span></div>
+        <div style="color:var(--muted); font-weight:400;">Electronics Repair</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">Services</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="highlight">Book a repair</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="contact">
+    <h2>Contact & quotes</h2>
+    <p class="section-intro">
+      Use this form to request a repair, ask about a build, or check if your device is something I work on.
+    </p>
+    <div class="contact">
+      <div class="contact-details">
+        <img src="Icon.png" alt="Retro-ER Logo">
+        <p><strong>Email:</strong> <a href="mailto:contact@retro-er.com">contact@retro-er.com</a></p>
+        <p><strong>Phone:</strong> (402) 885-9837</p>
+        <p><strong>Location:</strong> Kearney, NE<br>Remote & ship-in service available</p>
+        <p><strong>Payment:</strong> PayPal only</p>
+        <p>
+          Typical response time is within 1 business day. If you don't hear back, check your spam folder
+          or text after emailing.
+        </p>
+      </div>
+      <form class="contact-form" action="https://formspree.io/f/xrbwgvev" method="POST">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="device">Device / model</label>
+          <input id="device" name="device" type="text" placeholder="e.g. PS5, Nintendo Switch, custom PC, etc." required>
+        </div>
+        <div class="field">
+          <label for="message">Issue description</label>
+          <textarea id="message" name="message" rows="4" placeholder="What is it doing (or not doing)? Include any history, error messages, or liquid/impact damage." required></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Send request</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; <span id="year"></span> Retro-ER Electronics Repair. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

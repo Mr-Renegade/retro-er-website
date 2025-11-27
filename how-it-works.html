@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>How It Works | Retro-ER Electronics Repair</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="Icon.png" alt="Retro-ER Logo">
+      <div class="logo-text">
+        <div>RETRO<span>-ER</span></div>
+        <div style="color:var(--muted); font-weight:400;">Electronics Repair</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">Services</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="highlight">Book a repair</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="section-intro">
+      Simple, transparent process. No surprise charges. If a repair doesn't make sense,
+      I'll tell you before you spend a cent.
+    </p>
+    <div class="how-steps">
+      <div class="step">
+        <span>1</span>
+        <strong>Describe the problem</strong><br>
+        Send the device model, symptoms, and any photos you have using the contact form.
+      </div>
+      <div class="step">
+        <span>2</span>
+        <strong>Get an estimate</strong><br>
+        I give you a ballpark price and timeline. If parts are needed, you'll know up front.
+      </div>
+      <div class="step">
+        <span>3</span>
+        <strong>Drop off or ship in</strong><br>
+        Local appointments or careful packaging and shipping from out of town.
+      </div>
+      <div class="step">
+        <span>4</span>
+        <strong>Repair & return</strong><br>
+        I complete the repair, test it, and get your hardware back to you ready to use.
+      </div>
+    </div>
+
+    <div style="margin-top: 2rem; text-align: center;">
+      <a class="btn btn-primary" href="contact.html">Get started</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  &copy; <span id="year"></span> Retro-ER Electronics Repair. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
