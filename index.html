@@ -17,8 +17,16 @@
         <div style="color:var(--muted); font-weight:400;">Electronics Repair</div>
       </div>
     </a>
-    <nav class="nav-links">
-      <a href="#services">Services</a>
+    <div class="mobile-nav-wrapper">
+      <a href="contact.html" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">Book a repair</a>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
       <a href="how-it-works.html">How it works</a>
       <a href="about.html">About</a>
       <a href="gallery.html">Gallery</a>
@@ -36,12 +44,11 @@
         Retro-ER repairs and builds gaming consoles, custom PCs, and everyday electronics so you can
         keep playing, working, and creating without replacing everything.
       </p>
+      <div class="hero-meta" style="font-weight: 600; margin-bottom: 1rem;">
+        Serving Kearney, NE and beyond • Ship-in repairs available
+      </div>
       <div class="hero-actions">
         <a class="btn btn-primary" href="contact.html">Get a repair quote</a>
-        <a class="btn btn-outline" href="#services">View services</a>
-      </div>
-      <div class="hero-meta">
-        Serving Kearney, NE and beyond • Ship-in repairs available
       </div>
     </div>
     <aside class="hero-card">
@@ -128,6 +135,10 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+  }
 </script>
 </body>
 </html>
