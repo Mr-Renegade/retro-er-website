@@ -324,9 +324,9 @@ section p.section-intro {
   width: 100%;
   padding: 0.55rem 0.6rem;
   border-radius: 0.6rem;
-  border: 1px solid var(--accent);
-  background: linear-gradient(135deg, rgba(255, 79, 123, 0.1), rgba(255, 179, 71, 0.1));
-  color: var(--accent-soft);
+  border: 1px solid rgba(255,255,255,0.15);
+  background: #101020;
+  color: var(--text);
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -334,13 +334,12 @@ section p.section-intro {
 }
 
 .file-upload-label:hover {
-  background: linear-gradient(135deg, rgba(255, 79, 123, 0.2), rgba(255, 179, 71, 0.2));
-  border-color: var(--accent-soft);
-  transform: translateY(-1px);
+  background: #151525;
+  border-color: rgba(255,255,255,0.25);
 }
 
 .file-upload-label:active {
-  transform: translateY(0);
+  background: #101020;
 }
 
 footer {
