@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gallery | Retro-ER Electronics Repair</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      aspect-ratio: 1;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 0.5rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 3rem;
+      color: white;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <img src="Icon.png" alt="Retro-ER Logo">
+      <div class="logo-text">
+        <div>RETRO<span>-ER</span></div>
+        <div style="color:var(--muted); font-weight:400;">Electronics Repair</div>
+      </div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#services">Services</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="about.html">About</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html" class="highlight">Book a repair</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Previous Work</h2>
+    <p class="section-intro">
+      Examples of console repairs, custom builds/mods, and electronics restoration I've completed for clients. Also some carnage.
+    </p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" onclick="openLightbox('gallery/IMG_20250528_194104.jpg')">
+        <img src="gallery/IMG_20250528_194104.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/IMG_20250722_192551.jpg')">
+        <img src="gallery/IMG_20250722_192551.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20221002_045102871.jpg')">
+        <img src="gallery/PXL_20221002_045102871.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230222_233725979.MP.jpg')">
+        <img src="gallery/PXL_20230222_233725979.MP.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230222_233808118.jpg')">
+        <img src="gallery/PXL_20230222_233808118.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230411_005434535.jpg')">
+        <img src="gallery/PXL_20230411_005434535.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230411_215506821.jpg')">
+        <img src="gallery/PXL_20230411_215506821.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230517_221545253.jpg')">
+        <img src="gallery/PXL_20230517_221545253.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230522_230849939.jpg')">
+        <img src="gallery/PXL_20230522_230849939.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230605_021224869.jpg')">
+        <img src="gallery/PXL_20230605_021224869.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230629_002953161.jpg')">
+        <img src="gallery/PXL_20230629_002953161.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230629_075539547.jpg')">
+        <img src="gallery/PXL_20230629_075539547.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230711_000420016.jpg')">
+        <img src="gallery/PXL_20230711_000420016.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230727_040602552.jpg')">
+        <img src="gallery/PXL_20230727_040602552.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230812_041224198.jpg')">
+        <img src="gallery/PXL_20230812_041224198.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230812_041253148.jpg')">
+        <img src="gallery/PXL_20230812_041253148.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230821_212733087.jpg')">
+        <img src="gallery/PXL_20230821_212733087.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230911_024847109.jpg')">
+        <img src="gallery/PXL_20230911_024847109.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230924_221401027.jpg')">
+        <img src="gallery/PXL_20230924_221401027.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20230927_023910880.jpg')">
+        <img src="gallery/PXL_20230927_023910880.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20240106_164953266.jpg')">
+        <img src="gallery/PXL_20240106_164953266.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20240221_005439302.jpg')">
+        <img src="gallery/PXL_20240221_005439302.jpg" alt="Repair work" loading="lazy">
+      </div>
+      <div class="gallery-item" onclick="openLightbox('gallery/PXL_20241015_223331000.jpg')">
+        <img src="gallery/PXL_20241015_223331000.jpg" alt="Repair work" loading="lazy">
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightbox-img" src="" alt="Full size image">
+</div>
+
+<footer>
+  &copy; <span id="year"></span> Retro-ER Electronics Repair. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('active');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+</script>
+</body>
+</html>
