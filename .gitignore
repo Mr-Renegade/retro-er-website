@@ -1,0 +1,13 @@
+# Large files and temporary files
+*.zip
+Screenshot_*.jpg
+Screenshot_*.png
+Pasted image.*
+
+# Backup files
+*.backup
+index.html.backup
+
+# OS files
+.DS_Store
+Thumbs.db
