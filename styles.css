@@ -73,6 +73,15 @@ header {
   border: 1px solid var(--accent);
   color: var(--accent-soft);
 }
+.nav-links .btn-primary {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  margin-left: 1.25rem;
+  font-weight: 600;
+  color: #050510;
+  border: none !important;
+  outline: none;
+}
 .hamburger {
   display: none;
   flex-direction: column;
@@ -139,7 +148,7 @@ main {
   text-decoration: none;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent), #ffb347);
+  background: linear-gradient(135deg, #ff4444, #ff9933);
   color: #050510;
   font-weight: 600;
 }
