@@ -1,10 +1,8 @@
 // Cloudflare Pages Function to handle contact form submissions
-// This runs server-side to keep the API key secure
+// Uploads photos to R2 and submits to Formspree with photo links
 
 export async function onRequestPost(context) {
-  const FORMBRICKS_API_KEY = 'fbk_bvBvPklAgXLOi-xSH7L14vy5hhuxPENwKBB_s7VMEXw';
-  const FORMBRICKS_API_URL = 'https://app.formbricks.com/api/v1';
-  const ENVIRONMENT_ID = 'cmiibd81f1ru9ad01ti4klf18';
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrbwgvev';
 
   try {
     // Parse the incoming form data
@@ -14,6 +12,7 @@ export async function onRequestPost(context) {
     const email = formData.get('email');
     const device = formData.get('device');
     const message = formData.get('message');
+    const photos = formData.getAll('photos');
 
     // Validate required fields
     if (!name || !email || !device || !message) {
@@ -29,37 +28,58 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Create response data for Formbricks
-    const responseData = {
-      environmentId: ENVIRONMENT_ID,
-      userId: email, // Use email as user identifier
-      finished: true,
-      data: {
-        name: name,
-        email: email,
-        device: device,
-        message: message,
-        timestamp: new Date().toISOString()
-      }
-    };
+    // Process photo uploads to R2 (if R2 is configured)
+    const photoUrls = [];
+    if (photos && photos.length > 0 && context.env.R2_BUCKET) {
+      for (const photo of photos) {
+        if (photo && photo.size > 0) {
+          try {
+            const timestamp = Date.now();
+            const filename = `repair-photos/${timestamp}-${photo.name}`;
 
-    // Submit to Formbricks API
-    const formbricksResponse = await fetch(`${FORMBRICKS_API_URL}/client/responses`, {
+            // Upload to R2
+            await context.env.R2_BUCKET.put(filename, photo.stream(), {
+              httpMetadata: {
+                contentType: photo.type
+              }
+            });
+
+            // Generate public URL (adjust domain as needed)
+            const photoUrl = `https://retro-er.com/uploads/${filename}`;
+            photoUrls.push(photoUrl);
+          } catch (err) {
+            console.error('Error uploading photo:', err);
+          }
+        }
+      }
+    }
+
+    // Create form data for Formspree
+    const formspreeData = new FormData();
+    formspreeData.append('name', name);
+    formspreeData.append('email', email);
+    formspreeData.append('device', device);
+
+    // Add photo URLs to message
+    let fullMessage = message;
+    if (photoUrls.length > 0) {
+      fullMessage += '\n\n--- Uploaded Photos ---\n' + photoUrls.join('\n');
+    }
+    formspreeData.append('message', fullMessage);
+
+    // Submit to Formspree
+    const formspreeResponse = await fetch(FORMSPREE_ENDPOINT, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': FORMBRICKS_API_KEY
-      },
-      body: JSON.stringify(responseData)
+      body: formspreeData
     });
 
-    if (!formbricksResponse.ok) {
-      const errorText = await formbricksResponse.text();
-      console.error('Formbricks API error:', errorText);
+    if (!formspreeResponse.ok) {
+      const errorText = await formspreeResponse.text();
+      console.error('Formspree error:', errorText);
 
       return new Response(JSON.stringify({
         success: false,
-        error: 'Failed to submit to Formbricks'
+        error: 'Failed to submit form'
       }), {
         status: 500,
         headers: {
@@ -72,7 +92,8 @@ export async function onRequestPost(context) {
     // Success
     return new Response(JSON.stringify({
       success: true,
-      message: 'Form submitted successfully'
+      message: 'Form submitted successfully',
+      photoCount: photoUrls.length
     }), {
       status: 200,
       headers: {
@@ -86,7 +107,7 @@ export async function onRequestPost(context) {
 
     return new Response(JSON.stringify({
       success: false,
-      error: 'Internal server error'
+      error: 'Internal server error: ' + error.message
     }), {
       status: 500,
       headers: {
