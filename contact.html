@@ -5,15 +5,6 @@
   <title>Contact & Quotes | Retro-ER Electronics Repair</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
-
-  <!-- START Formbricks Surveys -->
-  <script type="text/javascript">
-  !function(){
-      var appUrl = "https://app.formbricks.com";
-      var environmentId = "cmiibd81f1ru9ad01ti4klf18";
-      var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=appUrl+"/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:environmentId,appUrl:appUrl}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
-  </script>
-  <!-- END Formbricks Surveys -->
 </head>
 <body>
 <header>
@@ -105,7 +96,7 @@
     document.getElementById('navLinks').classList.toggle('active');
   }
 
-  // Handle contact form submission with Formbricks
+  // Handle contact form submission via Cloudflare Pages Function
   document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -116,25 +107,19 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-    // Get form data
-    const formData = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      device: document.getElementById('device').value,
-      message: document.getElementById('message').value
-    };
+    // Create FormData object
+    const formData = new FormData(this);
 
     try {
-      // Send to Formbricks using track event
-      if (window.formbricks) {
-        await window.formbricks.track('contact_form_submission', {
-          name: formData.name,
-          email: formData.email,
-          device: formData.device,
-          message: formData.message,
-          timestamp: new Date().toISOString()
-        });
+      // Submit to Cloudflare Pages Function
+      const response = await fetch('/functions/submit-contact', {
+        method: 'POST',
+        body: formData
+      });
 
+      const result = await response.json();
+
+      if (result.success) {
         // Show success message
         formStatus.style.display = 'block';
         formStatus.style.background = 'rgba(46, 213, 115, 0.1)';
@@ -145,7 +130,7 @@
         // Reset form
         this.reset();
       } else {
-        throw new Error('Formbricks not loaded');
+        throw new Error(result.error || 'Submission failed');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
