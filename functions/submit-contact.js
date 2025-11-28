@@ -44,8 +44,8 @@ export async function onRequestPost(context) {
               }
             });
 
-            // Generate public URL (adjust domain as needed)
-            const photoUrl = `https://retro-er.com/uploads/${filename}`;
+            // Generate public URL using R2 bucket URL
+            const photoUrl = `https://e133bae2644573853b87f7bda4d09524.r2.cloudflarestorage.com/retro-er-photos/${filename}`;
             photoUrls.push(photoUrl);
           } catch (err) {
             console.error('Error uploading photo:', err);
