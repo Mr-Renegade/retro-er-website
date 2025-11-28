@@ -5,6 +5,15 @@
   <title>Contact & Quotes | Retro-ER Electronics Repair</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
+
+  <!-- START Formbricks Surveys -->
+  <script type="text/javascript">
+  !function(){
+      var appUrl = "https://app.formbricks.com";
+      var environmentId = "cmiibd81f1ru9ad01ti4klf18";
+      var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=appUrl+"/js/formbricks.umd.cjs",t.onload=function(){window.formbricks?window.formbricks.setup({environmentId:environmentId,appUrl:appUrl}):console.error("Formbricks library failed to load properly. The formbricks object is not available.");};var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(t,e)}();
+  </script>
+  <!-- END Formbricks Surveys -->
 </head>
 <body>
 <header>
@@ -52,7 +61,7 @@
           or text after emailing.
         </p>
       </div>
-      <form class="contact-form" action="https://formspree.io/f/xrbwgvev" method="POST">
+      <form class="contact-form" id="contactForm">
         <div class="field">
           <label for="name">Name</label>
           <input id="name" name="name" type="text" placeholder="First and Last name" required>
@@ -79,6 +88,7 @@
           </div>
         </div>
         <button class="btn btn-primary" type="submit">Send request</button>
+        <div id="formStatus" style="margin-top: 1rem; padding: 1rem; border-radius: 0.5rem; display: none;"></div>
       </form>
     </div>
   </section>
@@ -94,6 +104,64 @@
   function toggleMenu() {
     document.getElementById('navLinks').classList.toggle('active');
   }
+
+  // Handle contact form submission with Formbricks
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formStatus = document.getElementById('formStatus');
+    const submitBtn = this.querySelector('button[type="submit"]');
+
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    // Get form data
+    const formData = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      device: document.getElementById('device').value,
+      message: document.getElementById('message').value
+    };
+
+    try {
+      // Send to Formbricks using track event
+      if (window.formbricks) {
+        await window.formbricks.track('contact_form_submission', {
+          name: formData.name,
+          email: formData.email,
+          device: formData.device,
+          message: formData.message,
+          timestamp: new Date().toISOString()
+        });
+
+        // Show success message
+        formStatus.style.display = 'block';
+        formStatus.style.background = 'rgba(46, 213, 115, 0.1)';
+        formStatus.style.color = '#2ed573';
+        formStatus.style.border = '1px solid #2ed573';
+        formStatus.textContent = 'Message sent successfully! I\'ll get back to you within 1 business day.';
+
+        // Reset form
+        this.reset();
+      } else {
+        throw new Error('Formbricks not loaded');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+
+      // Show error message
+      formStatus.style.display = 'block';
+      formStatus.style.background = 'rgba(255, 71, 87, 0.1)';
+      formStatus.style.color = '#ff4757';
+      formStatus.style.border = '1px solid #ff4757';
+      formStatus.textContent = 'Error sending message. Please email me directly at contact@retro-er.com or call (402) 885-9837.';
+    } finally {
+      // Re-enable submit button
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send request';
+    }
+  });
 </script>
 </body>
 </html>
