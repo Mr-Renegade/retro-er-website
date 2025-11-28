@@ -12,7 +12,6 @@ export async function onRequestPost(context) {
     const email = formData.get('email');
     const device = formData.get('device');
     const message = formData.get('message');
-    const photos = formData.getAll('photos');
 
     // Validate required fields
     if (!name || !email || !device || !message) {
@@ -30,10 +29,13 @@ export async function onRequestPost(context) {
 
     // Process photo uploads to R2 (if R2 is configured)
     const photoUrls = [];
-    if (photos && photos.length > 0 && context.env.R2_BUCKET) {
-      for (const photo of photos) {
-        if (photo && photo.size > 0) {
-          try {
+    let photoUploadNote = '';
+
+    try {
+      const photos = formData.getAll('photos');
+      if (photos && photos.length > 0 && context.env && context.env.R2_BUCKET) {
+        for (const photo of photos) {
+          if (photo && photo.size > 0) {
             const timestamp = Date.now();
             const filename = `repair-photos/${timestamp}-${photo.name}`;
 
@@ -47,39 +49,48 @@ export async function onRequestPost(context) {
             // Generate public URL using R2 bucket URL
             const photoUrl = `https://e133bae2644573853b87f7bda4d09524.r2.cloudflarestorage.com/retro-er-photos/${filename}`;
             photoUrls.push(photoUrl);
-          } catch (err) {
-            console.error('Error uploading photo:', err);
           }
         }
+      } else if (photos && photos.length > 0) {
+        photoUploadNote = '\n\nNote: Photos were selected but R2 storage is not configured yet. Please email photos separately.';
       }
+    } catch (photoError) {
+      console.error('Photo upload error:', photoError);
+      photoUploadNote = '\n\nNote: Photo upload failed. Please email photos separately.';
     }
 
-    // Create form data for Formspree
-    const formspreeData = new FormData();
-    formspreeData.append('name', name);
-    formspreeData.append('email', email);
-    formspreeData.append('device', device);
-
-    // Add photo URLs to message
+    // Prepare message with photo URLs or note
     let fullMessage = message;
     if (photoUrls.length > 0) {
       fullMessage += '\n\n--- Uploaded Photos ---\n' + photoUrls.join('\n');
+    } else if (photoUploadNote) {
+      fullMessage += photoUploadNote;
     }
-    formspreeData.append('message', fullMessage);
+
+    // Submit to Formspree using URLSearchParams (simpler than FormData)
+    const formspreeBody = new URLSearchParams({
+      name: name,
+      email: email,
+      device: device,
+      message: fullMessage
+    });
 
     // Submit to Formspree
     const formspreeResponse = await fetch(FORMSPREE_ENDPOINT, {
       method: 'POST',
-      body: formspreeData
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formspreeBody
     });
 
     if (!formspreeResponse.ok) {
       const errorText = await formspreeResponse.text();
-      console.error('Formspree error:', errorText);
+      console.error('Formspree error:', formspreeResponse.status, errorText);
 
       return new Response(JSON.stringify({
         success: false,
-        error: 'Failed to submit form'
+        error: `Formspree error: ${formspreeResponse.status}`
       }), {
         status: 500,
         headers: {
@@ -107,7 +118,7 @@ export async function onRequestPost(context) {
 
     return new Response(JSON.stringify({
       success: false,
-      error: 'Internal server error: ' + error.message
+      error: 'Error: ' + error.message
     }), {
       status: 500,
       headers: {
