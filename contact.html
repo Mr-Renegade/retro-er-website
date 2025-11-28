@@ -112,7 +112,7 @@
 
     try {
       // Submit to Cloudflare Pages Function
-      const response = await fetch('/functions/submit-contact', {
+      const response = await fetch('/submit-contact', {
         method: 'POST',
         body: formData
       });
